@@ -2,16 +2,16 @@
 name: lemp
 services:
   www:
-    image: nginx:1.28
+    image: nginx:${NGINX_IMAGE_TAG}
     container_name: www
     ports:
-      - 80:80
+      - ${NGINX_PORT_PUBLISHED:-80}:80
     volumes:
       - ./html:/usr/share/nginx/html:ro
       - ./nginx-conf:/etc/nginx/conf.d:ro
     networks:
       lempnet:
-        ipv4_address: 172.20.0.100
+        ipv4_address: 172.20.0.${NGINX_IPV4}
     depends_on:
       - php
     restart: unless-stopped
