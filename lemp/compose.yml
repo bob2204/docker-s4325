@@ -1,4 +1,12 @@
 ---
+
+x-logging: &default-logging
+  logging:
+    driver: json-file
+    options:
+      max-file: ${LOGGING_MAX_FILE}
+      max-size: ${LOGGING_MAX_SIZE}
+
 name: lemp
 services:
   www:
@@ -14,11 +22,7 @@ services:
         ipv4_address: ${LEMPNET_PREFIX}.${NGINX_IPV4}
     depends_on:
       - php
-    logging:
-      driver: json-file
-      options:
-        max-file: ${LOGGING_MAX_FILE}
-        max-size: ${LOGGING_MAX_SIZE}
+    <<: *default-logging
     restart: unless-stopped
 
   php:
@@ -29,11 +33,7 @@ services:
     networks:
       lempnet:
         ipv4_address: ${LEMPNET_PREFIX}.110
-    logging:
-      driver: json-file
-      options:
-        max-file: ${LOGGING_MAX_FILE}
-        max-size: ${LOGGING_MAX_SIZE}
+    <<: *default-logging
     restart: unless-stopped
 
   db:
@@ -48,11 +48,7 @@ services:
         ipv4_address: ${LEMPNET_PREFIX}.120
     volumes:
       - datadb:/var/lib/mysql
-    logging:
-      driver: json-file
-      options:
-        max-file: ${LOGGING_MAX_FILE}
-        max-size: ${LOGGING_MAX_SIZE}
+    <<: *default-logging
     restart: unless-stopped
 
 volumes:
