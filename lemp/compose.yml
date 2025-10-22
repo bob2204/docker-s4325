@@ -1,8 +1,13 @@
 ---
+name: lemp
 services:
   db:
     image: mariadb:11.0
     container_name: mariadb
+    environment:
+      - MARIADB_DATABASE=stage
+    env_file:
+      - mariadb.env
     networks:
       lempnet:
         ipv4_address: 172.20.0.120
