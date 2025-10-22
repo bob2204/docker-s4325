@@ -1,0 +1,10 @@
+---
+# Fichier compose additionnel
+#
+# docker compose -f compose.yml -f compose-www.yml config
+#
+services:
+  www:
+    ports:
+      - 443:443
+    container_name: http
