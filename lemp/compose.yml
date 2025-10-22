@@ -22,7 +22,10 @@ services:
         ipv4_address: ${LEMPNET_PREFIX}.${NGINX_IPV4}
     depends_on:
       - php
-    <<: *default-logging
+    logging:
+      driver: journald
+      options:
+        tag: www
     restart: unless-stopped
 
   php:
