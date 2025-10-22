@@ -11,7 +11,7 @@ services:
       - ./nginx-conf:/etc/nginx/conf.d:ro
     networks:
       lempnet:
-        ipv4_address: 172.20.0.${NGINX_IPV4}
+        ipv4_address: ${LEMPNET_PREFIX}.${NGINX_IPV4}
     depends_on:
       - php
     restart: unless-stopped
@@ -23,7 +23,7 @@ services:
       - ./html:/var/www/html:ro
     networks:
       lempnet:
-        ipv4_address: 172.20.0.110
+        ipv4_address: ${LEMPNET_PREFIX}.110
     restart: unless-stopped
 
   db:
@@ -35,7 +35,7 @@ services:
       - mariadb.env
     networks:
       lempnet:
-        ipv4_address: 172.20.0.120
+        ipv4_address: ${LEMPNET_PREFIX}.120
     volumes:
       - datadb:/var/lib/mysql
     restart: unless-stopped
@@ -47,7 +47,7 @@ networks:
   lempnet:
     ipam:
       config:
-        - subnet: 172.20.0.0/16
-          gateway: 172.20.0.254
+        - subnet: ${LEMPNET_PREFIX}.0/16
+          gateway: ${LEMPNET_PREFIX}.254
     driver_opts:
-      com.docker.network.bridge.name: lempnet0
+      com.docker.network.bridge.name: ${LEMPNET_INTERFACE}
