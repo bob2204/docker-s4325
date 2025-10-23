@@ -10,6 +10,7 @@ services:
       - 8080:8080
     volumes:
       - ./traefik.yml:/etc/traefik/traefik.yml
+      - ./user.pass:/etc/traefik/user.pass
       - /run/docker.sock:/run/docker.sock
     restart: unless-stopped
     networks:
