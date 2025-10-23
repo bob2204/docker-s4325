@@ -28,6 +28,8 @@ services:
       - traefik.docker.network=proxynet
       - traefik.http.routers.hello-2.rule=PathPrefix(`/hello-2`)
       - traefik.http.services.hello-2.loadbalancer.server.port=80
+      - traefik.http.middlewares.striphello-2.stripprefix.prefixes=/hello-2
+      - traefik.http.routers.hello-2.middlewares=striphello-2
     restart: unless-stopped
 
   hello-3:
