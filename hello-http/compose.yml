@@ -1,0 +1,32 @@
+---
+services:
+  hello-1:
+    image: bob2606/hello-http:0.8.33
+    container_name: hello-1
+    hostname: hello-1
+    restart: unless-stopped
+    networks:
+      hellonet:
+      proxynet:
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=proxynet
+      - traefik.http.routers.hello-1.rule=Host(`hello-1.stage.local`)
+      - traefik.http.services.hello-1.loadbalancer.server.port=8080
+
+  hello-2:
+    image: bob2606/hello-http:0.8.33
+    container_name: hello-2
+    hostname: hello-2
+    restart: unless-stopped
+
+  hello-3:
+    image: bob2606/hello-http:0.8.33
+    container_name: hello-3
+    hostname: hello-3
+    restart: unless-stopped
+
+networks:
+  hellonet:
+  proxynet:
+    external: true
