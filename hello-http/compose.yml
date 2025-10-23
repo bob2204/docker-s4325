@@ -18,6 +18,16 @@ services:
     image: bob2606/hello-http:0.8.33
     container_name: hello-2
     hostname: hello-2
+    environment:
+      - PORT=80
+    networks:
+      hellonet:
+      proxynet:
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=proxynet
+      - traefik.http.routers.hello-2.rule=PathPrefix(`/hello-2`)
+      - traefik.http.services.hello-2.loadbalancer.server.port=80
     restart: unless-stopped
 
   hello-3:
