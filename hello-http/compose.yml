@@ -36,6 +36,16 @@ services:
     image: bob2606/hello-http:0.8.33
     container_name: hello-3
     hostname: hello-3
+    networks:
+      hellonet:
+      proxynet:
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=proxynet
+      - traefik.http.routers.hello-3.rule=(Host(`hello.stage.local`) && PathPrefix(`/hello-3`))
+      - traefik.http.services.hello-3.loadbalancer.server.port=8080
+      - traefik.http.middlewares.striphello-3.stripprefix.prefixes=/hello-3
+      - traefik.http.routers.hello-3.middlewares=striphello-3
     restart: unless-stopped
 
 networks:
