@@ -1,0 +1,65 @@
+---
+services:
+  www:
+    image: nginx:1.28
+    container_name: www
+    volumes:
+      - html:/usr/share/nginx/html:ro
+      - nginx-conf:/etc/nginx/conf.d:ro
+    networks:
+      lempnet:
+    deploy:
+      replicas: 1
+    healthcheck:
+      test: ["CMD","curl","-f","http://localhost/index.html"]
+      interval: 10s
+      timeout: 1s
+      retries: 2
+
+  php:
+    image: 192.168.56.200:5000/php-mysql:8.2-fpm
+    deploy:
+      replicas: 2
+    volumes:
+      - html:/var/www/html:ro
+    networks:
+      lempnet:
+
+  db:
+    image: mariadb:11.1
+    container_name: mariadb
+    deploy:
+      replicas: 1
+    environment:
+      - MARIADB_DATABASE=stage
+    env_file:
+      - mariadb.env
+    networks:
+      lempnet:
+    volumes:
+      - datadb:/var/lib/mysql
+
+volumes:
+  html:
+    driver_opts:
+      type: nfs
+      o: addr=192.168.56.200,vers=4.2
+      device: ":/html"
+
+  nginx-conf:
+    driver_opts:
+      type: nfs
+      o: addr=192.168.56.200,vers=4.2
+      device: ":/nginx-conf"
+
+  datadb:
+    driver_opts:
+      type: nfs
+      o: addr=192.168.56.200,vers=4.2
+      device: ":/datadb"
+
+networks:
+  lempnet:
+    ipam:
+      config:
+        - subnet: 172.30.0.0/16
